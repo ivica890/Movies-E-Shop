@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<style>
+
+    .column-gap {
+        column-gap: 2px;
+    }
+
+    .container-fluid {
+        color: #6F3185 !important;
+    }
+
+    .list-color {
+        background: #3D3D3D !important;
+    }
+
+    .borderless li {
+        border-top: none;
+    }
+
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: red;
+        color: white;
+        text-align: center;
+    }
+
+    .selected-seat {
+        background-color: red;
+        border: 2px solid black;
+        /* Add any other desired styling for selected seats */
+    }
+
+    .seat-div {
+        width: 30px;
+        height: 30px;
+        border: 1px solid #ccc;
+        margin: 2px;
+        cursor: pointer;
+    }
+
+    .green-div {
+        background-color: green;
+    }
+
+    .red-div {
+        background-color: red;
+    }
+
+    .selected-seat {
+        background-color: red;
+    }
+
+    .unavailable-seat {
+        cursor: not-allowed;
+    }
+
+</style>
+<body>
+<nav class="navbar navbar-expand-lg container-fluid list-color navbar-dark" style="font-size: 220%;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'film_list' %}"><i><b><h2>CINEMA BITOLA STORE</h2></b></i></a>
+        <di class="navbar-nav d-flex flex-row me-1">
+            <li class="nav-item me-3 me-lg-0">
+                <a class="nav-link text-white" href="{% url 'film_list' %}"><i class="fas fa-envelope mx-1"></i>
+                    HOME</a>
+            </li>
+            <i class="bi bi-house-door mr-5"></i>
+            <li class="nav-item me-3 me-lg-0">
+                <div class="w-5 h-5">
+                    <a class="nav-link text-white" href="{% url 'film_list' %}"><i class="fas fa-cog mx-1"></i>
+                        MOVIES</a>
+                </div>
+            </li>
+            <i class="bi bi-camera-reels mr-5"></i>
+            <li class="nav-item me-3 me-lg-0">
+                <a class="nav-link text-white" href="{% url 'shopping_cart' %}"><i class="bi bi-cart4 bi--4xl"
+                                                                                   style="color:#6F3185 "></i>
+                </a>
+            </li>
+            <li class="nav-item me-3 me-lg-0">
+                <a class="nav-link text-white" href="#"> <i class="bi bi-person-fill" style="color:#6F3185 "></i>
+                </a>
+            </li>
+
+            <li class="nav-item me-3 me-lg-0">
+                <a class="nav-link text-white ml-5" href="{% url 'logout' %}"><i class="fas fa-envelope mx-1"></i> LOG
+                    OUT</a>
+            </li>
+
+        </di>
+    </div>
+
+</nav>
+<footer class="bg-light text-center text-lg-start footer">
+    <div class="text-center p-3" style="background-color: #3D3D3D;">
+        © 2023 Copyright:
+    </div>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<div class="container p-5">
+    <div class="row mb-1 column-gap">
+        {% for seat in seats %}
+            <div class="col-md-1
+
+
+
+                    {% if seat.is_available %}{% if seat.selected %}selected-seat{% else %}green-div{% endif %}{% else %}red-div unavailable-seat{% endif %} seat-div"
+                 id="{{ seat.id }}"></div>
+        {% endfor %}
+    </div>
+    <a id="save-seats-btn" class="btn btn-primary mt-4" href="{% url 'shopping_cart' %}">Create Order</a>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Retrieve the CSRF token from the cookie
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Check if the cookie name matches the pattern: csrftoken=<token>
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Attach the CSRF token to all AJAX requests
+        function csrfSafeMethod(method) {
+            // These HTTP methods do not require CSRF protection
+            return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    var csrftoken = getCookie('csrftoken');
+                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                }
+            }
+        });
+
+        $('.seat-div').click(function () {
+            var isAvailable = !$(this).hasClass('unavailable-seat');
+            if (isAvailable) {
+                $(this).toggleClass('selected-seat');
+
+                // Get the selected seat ID
+                var seatId = $(this).attr('id');
+
+                // Create the order based on the selected seat
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'create_order' %}',
+                    data: {
+                        seat_id: seatId
+                    },
+                    success: function (response) {
+                        alert('Order created successfully!');
+                        // Redirect to the order success page or update the UI as needed
+                    },
+                    error: function (response) {
+                        alert('Error occurred while creating the order.');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
+</body>
+</html>
