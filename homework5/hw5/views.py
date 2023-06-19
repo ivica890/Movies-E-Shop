@@ -3,12 +3,8 @@ import json
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail
-from django.db import transaction
 from django.http import JsonResponse
 
-# Create your views here.
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
