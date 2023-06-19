@@ -208,36 +208,6 @@
 </footer>
 <script>
     $(document).ready(function () {
-        // Retrieve the CSRF token from the cookie and attach it to AJAX requests
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Check if the cookie name matches the pattern: csrftoken=<token>
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        function csrfSafeMethod(method) {
-            // These HTTP methods do not require CSRF protection
-            return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
-        }
-
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    var csrftoken = getCookie('csrftoken');
-                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
-                }
-            }
-        });
 
         $('.delete-btn').click(function () {
             var orderId = $(this).data('order-id');
