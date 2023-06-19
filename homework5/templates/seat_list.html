@@ -47,7 +47,6 @@
     .selected-seat {
         background-color: red;
         border: 2px solid black;
-        /* Add any other desired styling for selected seats */
     }
 
     .seat-div {
@@ -56,14 +55,6 @@
         border: 1px solid #ccc;
         margin: 2px;
         cursor: pointer;
-    }
-
-    .green-div {
-        background-color: green;
-    }
-
-    .red-div {
-        background-color: red;
     }
 
     .selected-seat {
@@ -123,9 +114,6 @@
     <div class="row mb-1 column-gap">
         {% for seat in seats %}
             <div class="col-md-1
-
-
-
                     {% if seat.is_available %}{% if seat.selected %}selected-seat{% else %}green-div{% endif %}{% else %}red-div unavailable-seat{% endif %} seat-div"
                  id="{{ seat.id }}"></div>
         {% endfor %}
@@ -135,14 +123,12 @@
 
 <script>
     $(document).ready(function () {
-        // Retrieve the CSRF token from the cookie
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {
                 var cookies = document.cookie.split(';');
                 for (var i = 0; i < cookies.length; i++) {
                     var cookie = jQuery.trim(cookies[i]);
-                    // Check if the cookie name matches the pattern: csrftoken=<token>
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;
@@ -152,9 +138,7 @@
             return cookieValue;
         }
 
-        // Attach the CSRF token to all AJAX requests
         function csrfSafeMethod(method) {
-            // These HTTP methods do not require CSRF protection
             return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
         }
 
@@ -171,23 +155,15 @@
             var isAvailable = !$(this).hasClass('unavailable-seat');
             if (isAvailable) {
                 $(this).toggleClass('selected-seat');
-
-                // Get the selected seat ID
                 var seatId = $(this).attr('id');
-
-                // Create the order based on the selected seat
                 $.ajax({
                     type: 'POST',
                     url: '{% url 'create_order' %}',
                     data: {
                         seat_id: seatId
                     },
-                    success: function (response) {
-                        alert('Order created successfully!');
-                        // Redirect to the order success page or update the UI as needed
-                    },
                     error: function (response) {
-                        alert('Error occurred while creating the order.');
+                        alert('Error occurred while creating the order .');
                     }
                 });
             }

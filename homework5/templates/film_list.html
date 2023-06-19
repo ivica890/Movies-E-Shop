@@ -258,7 +258,6 @@
                 'csrfmiddlewaretoken': "{{ csrf_token }}"
             },
             success: function () {
-                // Reload the film list after successful deletion
                 location.reload();
             },
             error: function () {
@@ -269,21 +268,13 @@
 
 
     $(document).ready(function () {
-        // Initialize the accordion
         $('#accordionFilters .accordion-button').click(function () {
             $(this).toggleClass('active');
             var collapseId = $(this).attr('aria-controls');
             $('#' + collapseId).collapse('toggle');
         });
 
-        // Function to handle filter selection
-        function filterMovies(sortBy, sortOrder) {
-            // Perform the filtering logic here
 
-            // Example: Log the selected filter values
-            console.log("Sort By: " + sortBy);
-            console.log("Sort Order: " + sortOrder);
-        }
     });
 </script>
 </body>

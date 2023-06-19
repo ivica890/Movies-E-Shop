@@ -34,15 +34,6 @@
         border-radius: 30px;
     }
 
-    .button-sort {
-        background-color: #6F3185;
-        color: #fff;
-        display: inline-block;
-        padding: 0.25rem;
-        margin-bottom: 0.5rem;
-        text-align: center;
-        font-size: 1.2rem;
-    }
 
     .footer {
         position: fixed;
@@ -211,17 +202,14 @@
 
         $('.delete-btn').click(function () {
             var orderId = $(this).data('order-id');
-
-            // Send a DELETE request to delete the order
             $.ajax({
-                type: 'POST',  // Change the request method to POST
-                url: '/delete_order/',  // Update the URL to the correct endpoint
+                type: 'POST',
+                url: '/delete_order/',
                 data: {
                     order_id: orderId
                 },
                 success: function (response) {
                     alert('Order deleted successfully!');
-                    // Update the UI or perform any additional actions after successful deletion
                 },
                 error: function (response) {
                     alert('Error occurred while deleting the order.');
